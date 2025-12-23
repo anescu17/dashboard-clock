@@ -13,8 +13,7 @@
     }
 
     body {
-      background: #ffffff;              /* deep navy background */
-      color: #f9fafb;
+      background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -22,83 +21,109 @@
     }
 
     .clock-card {
-      background: linear-gradient(135deg, #14532d, #22c55e); /* UpTYD-style eco green */
+      background: linear-gradient(135deg, #14532d, #22c55e);
       border-radius: 18px;
-      padding: 18px 24px 20px;
+      /* Wider width, smaller padding top/bottom */
+      padding: 12px 30px; 
       box-shadow: 0 14px 35px rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(190, 242, 100, 0.65);          /* lime accent */
-      min-width: 260px;
+      border: 1px solid rgba(190, 242, 100, 0.65);
+      
+      /* Flex layout for horizontal look */
+      display: flex;
+      align-items: center;
+      gap: 40px; 
+      
+      /* Control overall card size */
+      min-width: 550px; 
+      max-height: 120px;
+    }
+
+    .brand-section {
       text-align: center;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      padding-right: 30px;
     }
 
     .logo {
       display: block;
-      margin: 0 auto 8px;
-      max-width: 140px;        /* adjust logo size here */
+      margin: 0 auto 4px;
+      max-width: 100px; /* Slightly smaller logo for horizontal layout */
       height: auto;
     }
 
     .brand {
-      font-size: 0.8rem;
-      letter-spacing: 0.16em;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #dcfce7;
-      margin-bottom: 10px;
     }
 
-    .clock-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: #bbf7d0;
-      margin-bottom: 4px;
+    .clock-section {
+      text-align: left;
+      flex-grow: 1;
     }
 
     .clock-time {
-      font-size: 2.3rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+      font-size: 2.8rem; /* Larger text for the wide layout */
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+      line-height: 1;
     }
 
     .clock-seconds {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       opacity: 0.85;
-      margin-left: 4px;
+      margin-left: 2px;
+    }
+
+    .clock-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 4px;
     }
 
     .clock-date {
-      margin-top: 6px;
       font-size: 0.9rem;
       color: #f0fdf4;
+      font-weight: 500;
     }
 
     .clock-tz {
-      margin-top: 2px;
-      font-size: 0.75rem;
-      color: #dcfce7;
+      font-size: 0.7rem;
+      color: #bbf7d0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
   </style>
 </head>
 <body>
-  <div class="clock-card">
-    <!-- Up To Your Door logo (make sure the file exists in the repo root) -->
-    <img src="uptyd-logo.png" alt="Up To Your Door" class="logo" />
-    <div class="brand">Up To Your Door</div>
 
-    <div class="clock-label">Current Time</div>
-    <div>
-      <span id="time" class="clock-time">--:--</span>
-      <span id="seconds" class="clock-seconds">--</span>
+  <div class="clock-card">
+    <div class="brand-section">
+      <img src="uptyd-logo.png" alt="Up To Your Door" class="logo" />
+      <div class="brand">Up To Your Door</div>
     </div>
-    <div id="date" class="clock-date">Loading…</div>
-    <div class="clock-tz">UK / Europe–London</div>
+
+    <div class="clock-section">
+      <div>
+        <span id="time" class="clock-time">--:--</span>
+        <span id="seconds" class="clock-seconds">--</span>
+      </div>
+      <div class="clock-details">
+        <div id="date" class="clock-date">Loading…</div>
+        <div class="clock-tz">UK / London</div>
+      </div>
+    </div>
   </div>
 
   <script>
     function updateClock() {
       const now = new Date();
 
-      // Time in Europe/London
       const timeStr = now.toLocaleTimeString("en-GB", {
         hour: "2-digit",
         minute: "2-digit",
@@ -107,13 +132,11 @@
         timeZone: "Europe/London",
       });
 
-      // "HH:MM:SS"
       const parts = timeStr.split(":");
       const hours = parts[0];
       const minutes = parts[1];
       const seconds = parts[2];
 
-      // Date in Europe/London
       const dateStr = now.toLocaleDateString("en-GB", {
         weekday: "short",
         day: "2-digit",
@@ -127,7 +150,6 @@
       document.getElementById("date").textContent = dateStr;
     }
 
-    // Initial call + tick every second
     updateClock();
     setInterval(updateClock, 1000);
   </script>
